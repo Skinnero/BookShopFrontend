@@ -1,0 +1,13 @@
+.filter {
+    flex: 20%;
+    overflow: auto;
+    height: 90vh;
+    border-right: lightgray solid 1px;
+}
+
+.filter form {
+    padding: 10px;
+    margin: 10px;
+    width: 18%;
+    position: fixed;
+}

@@ -1,0 +1,12 @@
+.ad {
+    flex: 20%;
+    overflow: hidden;
+    padding: 10px;
+    margin: 10px;
+}
+
+.ad img{
+    position: fixed;
+    height: 80vh;
+    width: 18%;
+}
