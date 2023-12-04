@@ -1,8 +1,13 @@
 import {Navigate} from "react-router-dom";
+import {JWT_TOKEN} from "../constants/LocalStorage";
+import {USER_PAGE} from "../constants/Url";
+import {useLocalStorage} from "../hook/UseLocalStorage";
 
 const UnauthorizedRoute = ({children}) => {
-    if (localStorage.getItem("ACCESS_TOKEN")) {
-        return <Navigate to={"/profile"} replace/>
+    const {getLocalStorage} = useLocalStorage(JWT_TOKEN)
+
+    if (getLocalStorage) {
+        return <Navigate to={USER_PAGE} replace/>
     }
     return (children)
 }
