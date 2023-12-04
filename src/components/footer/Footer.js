@@ -1,9 +1,9 @@
-import "./Footer.css"
+import {FooterDiv} from "./Footer.styles";
 
 const Footer = () => (
-    <footer className={"footer bg-body-tertiary"}>
+    <FooterDiv>
         Footer
-    </footer>
+    </FooterDiv>
 )
 
 export default Footer
