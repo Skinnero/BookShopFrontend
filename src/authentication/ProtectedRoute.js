@@ -1,8 +1,13 @@
 import {Navigate} from "react-router-dom";
+import {JWT_TOKEN} from "../constants/LocalStorage";
+import {LOGIN_PAGE} from "../constants/Url";
+import {useLocalStorage} from "../hook/UseLocalStorage";
 
 const ProtectedRoute = ({children}) => {
-    if (!localStorage.getItem("ACCESS_TOKEN")) {
-        return <Navigate to={"/login"} replace/>
+    const {getLocalStorage} = useLocalStorage(JWT_TOKEN)
+
+    if (!getLocalStorage()) {
+        return <Navigate to={LOGIN_PAGE} replace/>
     }
     return (children)
 }

@@ -3,31 +3,28 @@ import Footer from "../footer/Footer.js"
 import Filter from "../filter/Filter";
 import Product from "../product/Product";
 import Ad from "../ad/Ad";
-import "./HomePage.css"
 import {useEffect, useState} from "react";
-import {getProduct} from "../../api/Product";
+import {useApi} from "../../hook/UseApi";
+import {HomePageGrid, MainContentGrid} from "./HomePage.styles";
 
 const HomePage = () => {
-    const [apiData, setApiData] = useState([])
-
-    const updateApiData = (data) => {
-        setApiData(data)
-    }
+    const {get} = useApi()
+    const [products, setProducts] = useState([])
 
     useEffect(() => {
-        getProduct().then(response => setApiData(response))
+        get("/api/v1/products").then(response => setProducts(response))
     }, []);
 
     return (
-        <div>
+        <HomePageGrid>
             <Header/>
-            <div className={"main"}>
-                <Filter updateApiData={updateApiData}/>
-                <Product apiData={apiData}/>
+            <MainContentGrid>
+                <Filter setProducts={setProducts}/>
+                <Product products={products}/>
                 <Ad/>
-            </div>
+            </MainContentGrid>
             <Footer/>
-        </div>
+        </HomePageGrid>
     )
 }
 

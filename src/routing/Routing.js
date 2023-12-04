@@ -6,35 +6,46 @@ import ProtectedRoute from "../authentication/ProtectedRoute";
 import UserSignup from "../components/userform/UserSignup";
 import UserLogin from "../components/userform/UserLogin";
 import UnauthorizedRoute from "../authentication/UnauthorizedRoute";
+import {useContext, useEffect} from "react";
+import {UserContext} from "../context/UserContext";
+import {CHECKOUT_PAGE, LOGIN_PAGE, MAIN_PAGE, SIGNUP_PAGE, USER_PAGE} from "../constants/Url";
 
 
-const Routing = () => (
-    <Router>
-        <Routes>
-            <Route path={"/"} element={<HomePage/>}/>
-            <Route path={"*"} element={<NotFoundPage/>}/>
-            <Route path={"/login"} element={
-                <UnauthorizedRoute>
-                    <UserLogin/>
-                </UnauthorizedRoute>
-            }/>
-            <Route path={"/signup"} element={
-                <UnauthorizedRoute>
-                    <UserSignup/>
-                </UnauthorizedRoute>
-            }/>
-            <Route path={"/profile"} element={
-                <ProtectedRoute>
-                    <UserProfile/>
-                </ProtectedRoute>
-            }/>
-            <Route path={"/checkout"} element={
-                <ProtectedRoute>
-                    <UserProfile/>
-                </ProtectedRoute>
-            }/>
-        </Routes>
-    </Router>
-)
+const Routing = () => {
+    const {authenticate} = useContext(UserContext)
+
+    useEffect(() => {
+        authenticate()
+    }, []);
+
+    return (
+        <Router>
+            <Routes>
+                <Route path={"*"} element={<NotFoundPage/>}/>
+                <Route path={MAIN_PAGE} element={<HomePage/>}/>
+                <Route path={LOGIN_PAGE} element={
+                    <UnauthorizedRoute>
+                        <UserLogin/>
+                    </UnauthorizedRoute>
+                }/>
+                <Route path={SIGNUP_PAGE} element={
+                    <UnauthorizedRoute>
+                        <UserSignup/>
+                    </UnauthorizedRoute>
+                }/>
+                <Route path={USER_PAGE} element={
+                    <ProtectedRoute>
+                        <UserProfile/>
+                    </ProtectedRoute>
+                }/>
+                <Route path={CHECKOUT_PAGE} element={
+                    <ProtectedRoute>
+                        <UserProfile/>
+                    </ProtectedRoute>
+                }/>
+            </Routes>
+        </Router>
+    )
+}
 
 export default Routing

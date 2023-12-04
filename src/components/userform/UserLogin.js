@@ -1,43 +1,66 @@
-import {FloatingLabel} from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import "./UserLogin.css";
-import Button from "react-bootstrap/Button";
 import {useNavigate} from "react-router-dom";
+import {
+    BackButton,
+    UserConfirmationButton,
+    UserCredentialContentDiv,
+    UserCredentialDiv,
+    UserCredentialInput,
+    UserCredentialTitle,
+    UserLink,
+    UserText
+} from "./UserLogin.styles";
+import {MAIN_PAGE, SIGNUP_PAGE} from "../../constants/Url";
+import {useContext, useState} from "react";
+import {UserContext} from "../../context/UserContext";
 
 const UserLogin = () => {
     const navigate = useNavigate();
+    const {login} = useContext(UserContext)
+    const [userCredentials, setUserCredentials] =useState({
+        email: '',
+        password: ''
+    })
 
-    const navigateToHome = () => {
-        navigate("/")
-    }
-    const navigateToSignUp = () => {
-        navigate("/signup")
-    }
-
-    const navigateToAuth = () => {
-        document.location = "http://localhost:8080/login"
+    const updateUserCredentials = (e) => {
+        setUserCredentials({
+            ...userCredentials,
+            [e.target.name]: e.target.value
+        })
     }
 
+    const onSubmit = (e) => {
+        e.preventDefault()
+        login(userCredentials)
+    }
     return (
-        <Container className={"login-form"}>
-            <Form>
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Email address"
-                    className="mb-3"
-                >
-                    <Form.Control type="email" placeholder="name@example.com"/>
-                </FloatingLabel>
-                <FloatingLabel className="mb-3" controlId="floatingPassword" label="Password">
-                    <Form.Control type="password" placeholder="Password"/>
-                </FloatingLabel>
-                <Button variant={"success"}>Log In</Button>
-                <Button variant={"success"}><a href="http://localhost:8080/oauth2/authorize/google">Continue with Google</a></Button>
-                <Button variant={"secondary"} onClick={navigateToHome}>Back</Button>
-                <Button variant={"info"} onClick={navigateToSignUp}>Sign Up</Button>
-            </Form>
-        </Container>
+        <UserCredentialDiv>
+            <UserCredentialContentDiv>
+                <BackButton onClick={() => navigate(MAIN_PAGE)}>
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </BackButton>
+                <UserCredentialTitle>Log In</UserCredentialTitle>
+                <form onSubmit={onSubmit}>
+                    <UserCredentialInput type={"email"}
+                                         name={"email"}
+                                         onChange={updateUserCredentials}
+                                         placeholder={"Email"}>
+                    </UserCredentialInput>
+                    <UserCredentialInput type={"password"}
+                                         name={"password"}
+                                         onChange={updateUserCredentials}
+                                         placeholder={"Password"}>
+
+                    </UserCredentialInput>
+                    <UserConfirmationButton>Log In</UserConfirmationButton>
+                </form>
+                <UserText>
+                    Not registered yet?
+                </UserText>
+                <UserLink onClick={() => navigate(SIGNUP_PAGE)}>
+                    Sign Up
+                </UserLink>
+            </UserCredentialContentDiv>
+        </UserCredentialDiv>
     )
 }
 

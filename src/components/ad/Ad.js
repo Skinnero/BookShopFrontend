@@ -1,9 +1,7 @@
-import "./Ad.css"
-import Image from "react-bootstrap/Image"
 import Placeholder from "../../mockdata/dummy_placeholder.png"
+import {AdImage} from "./Ad.styles";
+
 const Ad = () => (
-    <div className={"ad"}>
-        <Image src={Placeholder} fluid="true" rounded="true"/>
-    </div>
+    <AdImage src={Placeholder} alt={Placeholder}/>
 )
 export default Ad

@@ -1,46 +1,81 @@
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import {FloatingLabel} from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import "./UserSignup.css"
 import {useNavigate} from "react-router-dom";
+import {
+    BackButton,
+    UserConfirmationButton,
+    UserCredentialContentDiv,
+    UserCredentialDiv,
+    UserCredentialInput,
+    UserCredentialTitle,
+    UserLink,
+    UserText
+} from "./UserLogin.styles";
+import {LOGIN_PAGE, MAIN_PAGE} from "../../constants/Url";
+import {useContext, useState} from "react";
+import {UserContext} from "../../context/UserContext";
 
 const UserSignup = () => {
     const navigate = useNavigate();
+    const {signup} = useContext(UserContext)
+    const [userCredentials, setUserCredentials] = useState({
+        name: '',
+        email: '',
+        password: '',
+        repeatPassword: ''
+    })
 
-    const navigateToHome = () => {
-        navigate("/")
-    }
-    const navigateToLogIn = () => {
-        navigate("/login")
+    const updateUserCredentials = (e) => {
+        setUserCredentials({
+            ...userCredentials,
+            [e.target.name]: e.target.value
+        })
     }
 
-    const navigateToAuth = () => {
-        document.location = "http://localhost:8080/login"
+    const onSubmit = (e) => {
+        e.preventDefault()
+        if (userCredentials.password !== userCredentials.repeatPassword) {
+            alert("Password and RepeatedPassword must be the same")
+        }
+        signup(userCredentials)
     }
 
     return (
-        <Container className={"signup-form"}>
-            <Form>
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Email address"
-                    className="mb-3"
-                >
-                    <Form.Control type="email" placeholder="name@example.com"/>
-                </FloatingLabel>
-                <FloatingLabel className="mb-3" controlId="floatingPassword" label="Password">
-                    <Form.Control type="password" placeholder="Password"/>
-                </FloatingLabel>
-                <FloatingLabel className="mb-3" controlId="floatingPassword" label="Repeat password">
-                    <Form.Control type="password" placeholder="Repeat password"/>
-                </FloatingLabel>
-                <Button variant={"success"}>Sign Up</Button>
-                <Button variant={"success"} onClick={navigateToAuth}>Continue with Google</Button>
-                <Button variant={"secondary"} onClick={navigateToHome}>Back</Button>
-                <Button variant={"info"} onClick={navigateToLogIn}>Log In</Button>
-            </Form>
-        </Container>
+        <UserCredentialDiv>
+            <UserCredentialContentDiv>
+                <BackButton onClick={() => navigate(MAIN_PAGE)}>
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </BackButton>
+                <UserCredentialTitle>Sign Up</UserCredentialTitle>
+                <form onSubmit={onSubmit}>
+                    <UserCredentialInput type={"text"}
+                                         placeholder={"Name"}
+                                         name={"name"}
+                                         onChange={updateUserCredentials}>
+                    </UserCredentialInput>
+                    <UserCredentialInput type={"email"}
+                                         placeholder={"Email"}
+                                         name={"email"}
+                                         onChange={updateUserCredentials}>
+                    </UserCredentialInput>
+                    <UserCredentialInput type={"password"}
+                                         placeholder={"Password"}
+                                         name={"password"}
+                                         onChange={updateUserCredentials}>
+                    </UserCredentialInput>
+                    <UserCredentialInput type={"password"}
+                                         placeholder={"Repeat Password"}
+                                         name={"repeatPassword"}
+                                         onChange={updateUserCredentials}>
+                    </UserCredentialInput>
+                    <UserConfirmationButton>Sign Up</UserConfirmationButton>
+                </form>
+                <UserText>
+                    Already have an account?
+                </UserText>
+                <UserLink onClick={() => navigate(LOGIN_PAGE)}>
+                    Log In
+                </UserLink>
+            </UserCredentialContentDiv>
+        </UserCredentialDiv>
     )
 }
 
