@@ -23,7 +23,8 @@ export const UserCredentialInput = styled.input `
   display: flex;
   align-items: center;
   border: none;
-  width: 20rem;
+  font-size: 26px;
+  width: 16rem;
   height: 3rem;
   padding: 2% 10% 2% 10%;
   border-radius: 1rem;
@@ -60,6 +61,8 @@ export const UserCredentialContentDiv = styled.div`
 `
 
 export const UserConfirmationButton = styled.button `
+  font-size: 26px;
+  font-family: inherit;
   width: 20rem;
   height: 3rem;
   border: none;

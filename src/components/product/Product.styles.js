@@ -42,6 +42,7 @@ export const ProductButton = styled.button `
   border: none;
   color: #9baacf;
   height: 100%;
+  font-size: 26px;
   margin: auto;
   padding: 3%;
   border-radius: 1rem;
