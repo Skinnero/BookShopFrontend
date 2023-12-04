@@ -6,7 +6,7 @@ import {useLocalStorage} from "../hook/UseLocalStorage";
 const UnauthorizedRoute = ({children}) => {
     const {getLocalStorage} = useLocalStorage(JWT_TOKEN)
 
-    if (getLocalStorage) {
+    if (getLocalStorage()) {
         return <Navigate to={USER_PAGE} replace/>
     }
     return (children)
