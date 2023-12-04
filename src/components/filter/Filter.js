@@ -1,13 +1,9 @@
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button";
-import "./Filter.css"
 import {useEffect, useState} from "react";
-import {getSupplier} from "../../api/Supplier"
-import {getProductCategory} from "../../api/Category"
-import {getFilteredProduct} from "../../api/Product";
+import {useApi} from "../../hook/UseApi";
+import {CheckBoxRow, FilterCheckBox, FilterListContainer, FilterTitle} from "./Filter.styles";
 
-const Filter = ({updateApiData}) => {
-
+const Filter = ({setProducts}) => {
+    const {get} = useApi()
     const [suppliers, setSuppliers] = useState([])
     const [productCategories, setProductCategories] = useState([])
     const [formData, setFormData] = useState({
@@ -16,9 +12,15 @@ const Filter = ({updateApiData}) => {
     })
 
     useEffect(() => {
-        getSupplier().then(response => setSuppliers(response))
-        getProductCategory().then(response => setProductCategories(response))
+        get("/api/v1/suppliers").then(resp => setSuppliers(resp))
+        get("/api/v1/product-categories").then(resp => setProductCategories(resp))
     }, []);
+
+    useEffect(() => {
+        get("/api/v1/products", formData).then(resp => {
+            setProducts(resp)
+        })
+    }, [formData]);
 
     const handleOnChange = (event) => {
         const checkboxes = document.querySelectorAll(`[name="${event.target.name}"]`)
@@ -45,43 +47,39 @@ const Filter = ({updateApiData}) => {
         })
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        getFilteredProduct(formData).then(response => updateApiData(response))
-    }
-
     return (
-        <div className={"filter"}>
-            <Form onSubmit={handleSubmit}>
-                <Form.Text>Supplier</Form.Text>
-                <div className="mb-3">
-                    {suppliers.map(supplier => (
-                        <Form.Check
-                            key={supplier.id}
-                            type={"checkbox"}
-                            label={supplier.name}
-                            name={"supplierId"}
-                            value={supplier.id}
-                            onChange={handleOnChange}
-                        />
-                    ))}
-                </div>
-                <Form.Text>Category</Form.Text>
-                <div className="mb-3 ">
-                    {productCategories.map(category => (
-                        <Form.Check
-                            key={category.id}
-                            type={"checkbox"}
-                            label={category.name}
-                            name={"productCategoryId"}
-                            value={category.id}
-                            onChange={handleOnChange}
-                        />
-                    ))}
-                </div>
-                <Button type={"submit"}>Filter</Button>
-            </Form>
-        </div>
+        <FilterListContainer>
+            <FilterTitle>Supplier</FilterTitle>
+            {suppliers.map((supplier, index) => (
+                <FilterCheckBox key={supplier.id}>
+                    <input
+                        id={"supplier-" + index}
+                        type="checkbox"
+                        name={"supplierId"}
+                        value={supplier.id}
+                        onClick={handleOnChange}
+                    />
+                    <CheckBoxRow htmlFor={"supplier-" + index}>
+                        <p>{supplier.name}</p>
+                    </CheckBoxRow>
+                </FilterCheckBox>
+            ))}
+            <FilterTitle>Category</FilterTitle>
+            {productCategories.map((category, index) => (
+                <FilterCheckBox key={category.id}>
+                    <input
+                        id={"category-" + index}
+                        type="checkbox"
+                        name={"productCategoryId"}
+                        value={category.id}
+                        onChange={handleOnChange}
+                    />
+                    <CheckBoxRow htmlFor={"category-" + index}>
+                        <p>{category.name}</p>
+                    </CheckBoxRow>
+                </FilterCheckBox>
+            ))}
+        </FilterListContainer>
     )
 }
 
