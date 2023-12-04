@@ -110,7 +110,6 @@ export const BasketTitle = styled.p `
 
 export const BasketTable = styled.table `
   margin: 1%;
-  padding: 2%;
   overflow: scroll;
   
   img {
@@ -136,6 +135,9 @@ export const BasketTable = styled.table `
     
     input {
       width: 20%;
+      height: 2rem;
+      font-family: inherit;
+      font-size: 1.4rem;
       margin-left: 5%;
     }
   }
@@ -157,6 +159,7 @@ export const CheckoutButton = styled.button `
   color: #9baacf;
   height: 100%;
   width: 30%;
+  min-width: 80%;
   border-radius: 1rem;
   box-shadow: ${shadow};
   justify-self: center;
