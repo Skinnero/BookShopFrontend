@@ -18,25 +18,6 @@ export const useApi = () => {
         config.headers["Content-Type"] = "application/json"
         config.withCredentials = true
 
-        // if (hasTokenExpired(getJwtToken())) {
-        //     await axios.post(SERVER_URL + "/api/v1/auths/refresh", {
-        //         refreshToken: getRefreshToken()
-        //     }, {
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "Authorization": getJwtToken()
-        //         }
-        //     })
-        //         .then(resp => {
-        //             setRefreshToken(resp.data.refreshToken)
-        //             setJwtToken(resp.data.type + " " + resp.data.accessToken)
-        //             config.headers.Authorization = resp.data.accessToken
-        //         })
-        //         .catch(err => {
-        //             console.error("Error while refreshing token: " + err)
-        //         })
-        // }
-
         return config
     })
 
@@ -52,13 +33,13 @@ export const useApi = () => {
                     requestQueue.push({resolve, reject})
                 })
             }
-        } else {
+        } else if (isRefreshing) {
             return new Promise((resolve, reject) => {
                 requestQueue.push({resolve, reject})
             })
         }
 
-        console.error("Error on " + err.request.method + " method with url " + err.request.url + ": " + err)
+        console.error("Error on " + err.config.method + " method with url " + err.request.responseURL + ": " + err.response.data.errorMessage)
         return Promise.reject(err)
     })
 
