@@ -17,7 +17,7 @@ const HomePage = () => {
 
     return (
         <HomePageGrid>
-            <Header/>
+            <Header setProducts={setProducts} showSearchBar={true}/>
             <MainContentGrid>
                 <Filter setProducts={setProducts}/>
                 <Product products={products}/>

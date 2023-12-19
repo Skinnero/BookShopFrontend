@@ -8,6 +8,8 @@ export const HomePageGrid = styled.div`
 `
 
 export const MainContentGrid = styled.div`
+  margin-top: 1%;
+  padding-bottom: 2%;
   grid-row-start: 2;
   display: grid;
   grid-template-columns: 15% 70% 15%;
