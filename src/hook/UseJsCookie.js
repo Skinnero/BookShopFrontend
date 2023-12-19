@@ -19,7 +19,7 @@ export const useJsCookie = (key) => {
      * @param cookieValue
      */
     const setCookie = (cookieValue) => {
-        Cookies.set(key, cookieValue)
+        Cookies.set(key, JSON.stringify(cookieValue))
     }
 
     /**
@@ -34,7 +34,11 @@ export const useJsCookie = (key) => {
      * Gets a cookie value
      */
     const getCookie = () => {
-        return Cookies.get(key)
+        try {
+            return JSON.parse(Cookies.get(key))
+        } catch (err) {
+            return Cookies.get(key)
+        }
     }
 
     return {setCookie, removeCookie, getCookie}
