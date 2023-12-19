@@ -63,7 +63,7 @@ export const RightHeaderPanel = styled.div`
     
   }
 `
-export const MiddleHeaderPanel = styled.div`
+export const MiddleHeaderForm = styled.form`
   width: 100%;
   display: flex;
   align-items: center;
@@ -101,79 +101,5 @@ export const MiddleHeaderPanel = styled.div`
     display: flex;
     color: #9baacf;
     transition: .3s ease;
-  }
-`
-
-export const BasketTitle = styled.p `
-
-`
-
-export const BasketTable = styled.table `
-  margin: 1%;
-  overflow: scroll;
-  
-  img {
-    width: 25%;
-  }
-
-  td {
-    padding: 1%;
-    width: 10%;
-    border-left: 1px solid darkgray;
-  }
-  
-  .basketImage {
-    border: none;
-  }
-  
-  tr {
-    border-radius: 1rem;
-    box-shadow: ${shadow};
-  }
-  
-  .quantity {
-    
-    input {
-      width: 20%;
-      height: 2rem;
-      font-family: inherit;
-      font-size: 1.4rem;
-      margin-left: 5%;
-    }
-  }
-
-  .closeIcon {
-    color: red;
-    text-align: right;
-    margin: auto;
-    padding-right:  2%;
-    
-    ion-icon {
-      cursor: pointer;
-    }
-  }
-`
-
-export const CheckoutButton = styled.button `
-  border: none;
-  color: #9baacf;
-  height: 100%;
-  width: 30%;
-  min-width: 80%;
-  border-radius: 1rem;
-  box-shadow: ${shadow};
-  justify-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: .3s ease;
-
-  &:hover {
-    color: #6d5dfc;
-  }
-
-  &:active {
-    box-shadow: ${innerShadow};
   }
 `
