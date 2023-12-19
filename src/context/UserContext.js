@@ -3,6 +3,8 @@ import {useApi} from "../hook/UseApi";
 import {useLocalStorage} from "../hook/UseLocalStorage";
 import {JWT_TOKEN, REFRESH_TOKEN, USER_ID} from "../constants/LocalStorage";
 import {LOGIN_PAGE, MAIN_PAGE} from "../constants/Url";
+import {useJsCookie} from "../hook/UseJsCookie";
+import {BASKET} from "../constants/Cookies";
 
 export const UserContext = createContext()
 
@@ -23,15 +25,34 @@ export const UserProvider = ({children}) => {
         setLocalStorage: setRefreshToken,
         removeLocalStorage: removeRefreshToken
     } = useLocalStorage(REFRESH_TOKEN)
+    const {
+        getCookie: getBasketCookie,
+        removeCookie: removeBasketCookie
+    } = useJsCookie(BASKET)
 
     const login = (userCredentials) => {
         post("/api/v1/auths/login", userCredentials)
             .then(resp => {
                 setUserCredentials(resp)
-                window.location.href = MAIN_PAGE
-            })
-            .then(() => {
-                authenticate()
+                post("/api/v1/baskets", {customerId: resp.customerId})
+                    .then(() => {
+                        get("/api/v1/baskets", {customerId: resp.customerId})
+                            .then(resp => {
+                                if (getBasketCookie()) {
+                                    const productsToRequest = getBasketCookie()
+                                        .flatMap(({id, quantity}) => Array(quantity).fill(id))
+                                    update("/api/v1/baskets/" + resp.basketId, {products: productsToRequest})
+                                        .then(() => {
+                                            removeBasketCookie()
+                                            window.location.href = MAIN_PAGE
+                                        })
+                                }
+                            })
+                    })
+                    .catch(() => {
+                        removeBasketCookie()
+                        window.location.href = MAIN_PAGE
+                    })
             })
     }
 
@@ -46,6 +67,7 @@ export const UserProvider = ({children}) => {
         post("/api/v1/auths/logout")
             .then(() => {
                 removeUserCredentials()
+                window.location.reload()
             })
     }
 
@@ -110,14 +132,14 @@ export const UserProvider = ({children}) => {
         update("/api/v1/baskets/" + user.basketId, {products: productsToRequest})
     }, [user.basket]);
 
-    const addToBasket = (product) => {
+    const addNewProductToBasket = (product) => {
         setUser({
             ...user,
             basket: [...user.basket, product]
         })
     }
 
-    const removeFromBasket = (product) => {
+    const decreaseQuantityOfProduct = (product) => {
         const indexOfProduct = user.basket.findIndex(item => item.id === product.id)
         const newBasket = user.basket.filter((item, index) => index !== indexOfProduct)
         setUser({
@@ -126,7 +148,7 @@ export const UserProvider = ({children}) => {
         })
     }
 
-    const removeProduct = (product) => {
+    const removeProductFromBasket = (product) => {
         const newBasket = user.basket.filter((item) => item.id !== product.id)
         setUser({
             ...user,
@@ -137,7 +159,7 @@ export const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider
-            value={{user, addToBasket, removeFromBasket, removeProduct, authenticate, login, signup, logout}}>
+            value={{user, addNewProductToBasket, decreaseQuantityOfProduct, removeProductFromBasket, authenticate, login, signup, logout}}>
             {children}
         </UserContext.Provider>
     )
