@@ -10,7 +10,7 @@ export const ProductsGrid = styled.div `
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   max-height: 40%;
-  margin: 1% 1% 1% 1%;
+  margin: 1%;
   gap: 1%;
 `
 

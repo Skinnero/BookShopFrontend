@@ -6,20 +6,27 @@ import {useContext} from "react";
 import {UserContext} from "../../context/UserContext";
 
 const Product = ({products}) => {
-    const {user, addToBasket} = useContext(UserContext)
+    const {user, addNewProductToBasket} = useContext(UserContext)
     const {setCookie: setBasket, getCookie: getBasket} = useJsCookie(BASKET)
 
     const handleAddToCart = (product) => {
         if (!user.id) {
             if (!getBasket()) {
-                setBasket(JSON.stringify([product]))
+                product.quantity = 1
+                setBasket([product])
             } else {
-                const oldBasket = JSON.parse(getBasket())
-                oldBasket.push(product)
-                setBasket(JSON.stringify(oldBasket))
+                const oldBasket = getBasket()
+                const productInBasket = oldBasket.find(prod => prod.id === product.id)
+                if (productInBasket) {
+                    productInBasket.quantity += 1
+                } else {
+                    product.quantity = 1
+                    oldBasket.push(product)
+                }
+                setBasket(oldBasket)
             }
         } else {
-            addToBasket(product)
+            addNewProductToBasket(product)
         }
     }
 
